@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Daftar - RBA Login System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-lg my-5">
+            <div class="card-header bg-primary text-white py-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-user-plus fa-2x me-3"></i>
+                    <h4 class="mb-0">Daftar Akun Baru</h4>
+                </div>
+            </div>
+            <div class="card-body p-5">
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user text-primary me-2"></i>Username
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope text-primary me-2"></i>Email
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock text-primary me-2"></i>Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">
+                            <i class="fas fa-lock text-primary me-2"></i>Konfirmasi Password
+                        </label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="security_question" class="form-label">
+                            <i class="fas fa-question-circle text-warning me-2"></i>Pertanyaan Keamanan
+                        </label>
+                        <select class="form-control" id="security_question" name="security_question" required>
+                            <option value="">Pilih pertanyaan keamanan...</option>
+                            <option value="Siapa nama hewan peliharaan pertama Anda?">Siapa nama hewan peliharaan pertama Anda?</option>
+                            <option value="Di kota mana Anda dilahirkan?">Di kota mana Anda dilahirkan?</option>
+                            <option value="Siapa nama guru favorit Anda di sekolah dasar?">Siapa nama guru favorit Anda di sekolah dasar?</option>
+                            <option value="Apa nama jalan tempat Anda tinggal saat kecil?">Apa nama jalan tempat Anda tinggal saat kecil?</option>
+                            <option value="Apa makanan favorit Anda?">Apa makanan favorit Anda?</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="security_answer" class="form-label">
+                            <i class="fas fa-key text-warning me-2"></i>Jawaban Pertanyaan Keamanan
+                        </label>
+                        <input type="text" class="form-control" id="security_answer" name="security_answer" 
+                               placeholder="Masukkan jawaban (tidak case-sensitive)" required>
+                        <div class="form-text">Jawaban ini akan digunakan untuk verifikasi keamanan tambahan.</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Daftar
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="small">
+                        Sudah punya akun? 
+                        <a href="{{ url_for('login_page') }}" class="text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login di sini
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validasi password
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        
+        form.addEventListener('submit', function(event) {
+            if (password.value.length < 8) {
+                event.preventDefault();
+                alert('Password harus minimal 8 karakter');
+                return false;
+            }
+            
+            if (password.value !== confirmPassword.value) {
+                event.preventDefault();
+                alert('Password dan konfirmasi password tidak cocok');
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %} 

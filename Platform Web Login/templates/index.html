@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Beranda - RBA Login System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 text-center">
+        <div class="card border-0 shadow-lg my-5">
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <!-- Logo Politeknik SSN -->
+                    <div class="mb-4">
+                        <img src="{{ url_for('static', filename='images/Logo Poltekssn.png') }}" 
+                             alt="Politeknik SSN" 
+                             style="height: 80px; width: auto;"
+                             class="mb-3">
+                        <h6 class="text-muted">Politeknik Siber dan Sandi Negara</h6>
+                    </div>
+                    
+                    <i class="fas fa-shield-alt fa-4x text-primary mb-3"></i>
+                    <h1 class="display-4 fw-bold mb-4">RBA Testing System</h1>
+                </div>
+                <p class="lead mb-4">
+                    Sistem pengujian Risk-Based Authentication menggunakan Isolation Forest.
+                </p>
+                <hr class="my-4">
+                <p class="mb-4">
+                    Sistem ini dirancang khusus untuk pengujian deteksi anomali login menggunakan algoritma Isolation Forest.
+                </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{{ url_for('login_page') }}" class="btn btn-primary btn-lg px-4 py-3 me-sm-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login Sekarang
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg px-4 py-3">
+                        <i class="fas fa-user-plus me-2"></i>Daftar Akun
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title">Isolation Forest</h3>
+                        </div>
+                        <p class="card-text">Menggunakan algoritma Isolation Forest murni untuk mendeteksi anomali dalam pola login pengguna.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-vial fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title">Testing Only</h3>
+                        </div>
+                        <p class="card-text">Sistem ini dirancang khusus untuk pengujian, bukan untuk lingkungan produksi.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title">Simple Analytics</h3>
+                        </div>
+                        <p class="card-text">Analisis sederhana berdasarkan pola perilaku login historis pengguna.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm mt-5">
+            <div class="card-body p-4">
+                <h3 class="mb-3">Fitur Sistem</h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Login/Register sederhana
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Deteksi anomali Isolation Forest
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Verifikasi Tambahan untuk risiko sedang dan tinggi
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Dashboard dan riwayat login
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning mt-4">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Catatan:</strong> Sistem ini hanya untuk pengujian. Kredensial default: admin/password123 atau user/password123. OTP: 1234
+        </div>
+    </div>
+</div>
+{% endblock %} 

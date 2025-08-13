@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Detail Analisis Fitur - RBA Login{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Header -->
+            <div class="card border-primary mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Detail Analisis Fitur Login
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Informasi Login</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Username:</strong> {{ username }}</li>
+                                <li><strong>Waktu Login:</strong> {{ login_time }}</li>
+                                <li><strong>IP Address:</strong> {{ ip_address }}</li>
+                                <li><strong>Browser:</strong> {{ browser }}</li>
+                                <li><strong>Sistem Operasi:</strong> {{ platform }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Hasil Analisis</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Skor Risiko:</label>
+                                <div class="progress mb-2" style="height: 25px;">
+                                    <div class="progress-bar
+                                        {% if risk_level == 0 %}bg-success
+                                        {% elif risk_level == 1 %}bg-warning
+                                        {% else %}bg-danger{% endif %}"
+                                        role="progressbar"
+                                        aria-valuenow="{{ (risk_score * 100)|round(1) }}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                        style="width: {{ (risk_score * 100)|round(1) }}%;">
+                                        {{ (risk_score * 100)|round(2) }}%
+                                    </div>
+                                </div>
+                                <span class="badge
+                                    {% if risk_level == 0 %}bg-success
+                                    {% elif risk_level == 1 %}bg-warning
+                                    {% else %}bg-danger{% endif %} fs-6">
+                                    {% if risk_level == 0 %}Risiko Rendah
+                                    {% elif risk_level == 1 %}Risiko Sedang
+                                    {% else %}Risiko Tinggi{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameter Ekstraksi -->
+            {% if extracted_params %}
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Parameter yang Diekstrak dari Login
+                    </h5>
+                    <small>Parameter yang diekstrak oleh sistem untuk analisis anomali</small>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Parameter Login Saat Ini -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-info">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-laptop text-info me-2"></i>
+                                        Parameter Login Saat Ini
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Browser:</strong></td>
+                                            <td>{{ extracted_params.current_browser if extracted_params.current_browser else 'Tidak tersedia' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>OS:</strong></td>
+                                            <td>{{ extracted_params.current_os if extracted_params.current_os else 'Tidak tersedia' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Device:</strong></td>
+                                            <td>{{ extracted_params.current_device if extracted_params.current_device else 'Tidak tersedia' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Jam Login:</strong></td>
+                                            <td>{% if extracted_params.current_hour %}{{ extracted_params.current_hour }}:00{% else %}Tidak tersedia{% endif %}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>IP Address:</strong></td>
+                                            <td>{{ extracted_params.current_ip if extracted_params.current_ip else 'Tidak tersedia' }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informasi Geolokasi -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-warning">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-globe text-warning me-2"></i>
+                                        Informasi Geolokasi
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    {% if extracted_params.current_geo %}
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>ASN:</strong></td>
+                                            <td>{{ extracted_params.current_geo.asn }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Region:</strong></td>
+                                            <td>{{ extracted_params.current_geo.region }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Organization:</strong></td>
+                                            <td>{{ extracted_params.current_geo.org }}</td>
+                                        </tr>
+                                    </table>
+                                    {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        Informasi geolokasi tidak tersedia
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Detail Fitur -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-microscope me-2"></i>
+                        Analisis Detail Setiap Fitur
+                    </h5>
+                    <small class="text-muted">
+                        Fitur diurutkan berdasarkan kontribusi terhadap skor risiko (tertinggi ke terendah)
+                    </small>
+                </div>
+                <div class="card-body">
+                    {% if feature_details %}
+                        <div class="row">
+                            {% for feature in feature_details %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100 border-{{ feature.color }}">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-{{ feature.color }}">
+                                            <i class="fas fa-cog me-2"></i>
+                                            {{ feature.name }}
+                                        </h6>
+                                        
+                                        <!-- Progress Bar -->
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <small>Skor Anomali:</small>
+                                                <small><strong>{{ feature.score }}</strong></small>
+                                            </div>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar bg-{{ feature.color }}"
+                                                     role="progressbar"
+                                                     aria-valuenow="{{ feature.contribution|float }}"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"
+                                                     style="width: {{ feature.contribution|float }}%;">
+                                                    {{ feature.contribution|float }}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Kategori -->
+                                        <div class="text-center">
+                                            <span class="badge bg-{{ feature.color }} fs-6">
+                                                {{ feature.category }}
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Penjelasan -->
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                {% if feature.feature == 'OS Name_anomaly' %}
+                                                    Mengukur seberapa konsisten sistem operasi yang digunakan
+                                                {% elif feature.feature == 'Browser Name_anomaly' %}
+                                                    Mengukur seberapa konsisten browser yang digunakan
+                                                {% elif feature.feature == 'Device Type_anomaly' %}
+                                                    Mengukur seberapa konsisten jenis perangkat (mobile/desktop)
+                                                {% elif feature.feature == 'TimeOfHour_anomaly' %}
+                                                    Menganalisis kesesuaian waktu login dengan pola historis
+                                                {% elif feature.feature == 'DailyLoginCount_anomaly' %}
+                                                    Menganalisis frekuensi login dalam sehari
+                                                {% elif feature.feature == 'TimeBetweenLogins_anomaly' %}
+                                                    Menganalisis interval waktu antara login
+                                                {% elif feature.feature == 'FailedLogin_combined_anomaly' %}
+                                                    Menganalisis riwayat login gagal dalam 24 jam terakhir
+                                                {% elif feature.feature == 'Geolocation_Anomaly' %}
+                                                    Mengukur konsistensi lokasi geografis yang digunakan
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Data fitur tidak tersedia untuk login ini.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Penjelasan Sistem -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Cara Kerja Sistem RBA
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-user-check fa-3x text-primary"></i>
+                                <h6 class="mt-2">1. Analisis Pola</h6>
+                                <small>Sistem menganalisis pola login historis Anda</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-brain fa-3x text-warning"></i>
+                                <h6 class="mt-2">2. Machine Learning</h6>
+                                <small>Model Isolation Forest mendeteksi anomali</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-success"></i>
+                                <h6 class="mt-2">3. Keputusan Keamanan</h6>
+                                <small>Sistem menentukan tingkat risiko dan tindakan</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6>Interpretasi Skor:</h6>
+                            <ul class="list-unstyled">
+                                <li><span class="badge bg-success me-2">Rendah (0-26%)</span> Login normal, tidak diperlukan verifikasi tambahan</li>
+                                <li><span class="badge bg-warning me-2">Sedang (26-57%)</span> Ada indikasi anomali, mungkin diperlukan verifikasi OTP</li>
+                                <li><span class="badge bg-danger me-2">Tinggi (57-100%)</span> Anomali terdeteksi, diperlukan verifikasi keamanan tambahan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Kembali -->
+            <div class="text-center mt-4 mb-4">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Kembali ke Dashboard
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}Verifikasi - RBA Login System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-lg my-5">
+            <div class="card-header bg-warning text-dark py-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                    <h4 class="mb-0">
+                        {% if show_otp %}Verifikasi OTP{% elif show_kba %}Verifikasi KBA{% else %}Verifikasi Tambahan Diperlukan{% endif %}
+                    </h4>
+                </div>
+            </div>
+            <div class="card-body p-5">
+                <div class="alert alert-warning mb-4">
+                    <p class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Sistem telah mendeteksi risiko tinggi pada login Anda. Hal ini mungkin karena Anda login dari:
+                    </p>
+                    <ul class="mb-0 mt-2">
+                        <li>Perangkat atau browser yang berbeda dari biasanya</li>
+                        <li>Lokasi atau waktu yang tidak biasa</li>
+                        <li>Pola login yang mencurigakan</li>
+                    </ul>
+                </div>
+                
+                {% if show_otp %}
+                <p class="mb-4">Untuk melindungi akun Anda, silakan masukkan kode OTP yang telah kami kirimkan:</p>
+                <form method="POST" action="{{ url_for('verify_otp') }}">
+                    <div class="mb-4">
+                        <label for="verification_code" class="form-label">
+                            <i class="fas fa-key text-primary me-2"></i>Kode OTP
+                        </label>
+                        <input type="text" class="form-control form-control-lg text-center" id="verification_code" name="verification_code" maxlength="6" required>
+                        <div class="form-text text-center">
+                            <i class="fas fa-envelope me-1"></i>
+                            Kode OTP telah dikirim ke email Anda
+                        </div>
+                        <div class="mt-2 text-center">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                Waktu tersisa: <span id="countdown">3:00</span>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Verifikasi OTP
+                        </button>
+                    </div>
+                </form>
+                {% elif show_kba %}
+                <p class="mb-4">Kode OTP valid. Silakan jawab pertanyaan keamanan berikut:</p>
+                <form method="POST" action="{{ url_for('verify_kba') }}">
+                    <div class="mb-4">
+                        <label for="security_answer" class="form-label">
+                            <i class="fas fa-question-circle text-warning me-2"></i>Pertanyaan Keamanan
+                        </label>
+                        <div class="alert alert-info mb-3">
+                            <strong>{{ user_security_question }}</strong>
+                        </div>
+                        <input type="text" class="form-control" id="security_answer" name="security_answer" placeholder="Masukkan jawaban Anda..." required>
+                        <div class="form-text">Jawaban tidak case-sensitive (huruf besar/kecil tidak berpengaruh).</div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Verifikasi KBA
+                        </button>
+                    </div>
+                </form>
+                {% else %}
+                <p class="mb-4">Untuk melindungi akun Anda, silakan masukkan kode OTP yang telah kami kirimkan:</p>
+                <form method="POST" action="{{ url_for('verify') }}">
+                    <div class="mb-4">
+                        <label for="verification_code" class="form-label">
+                            <i class="fas fa-key text-primary me-2"></i>Kode OTP
+                        </label>
+                        <input type="text" class="form-control form-control-lg text-center" id="verification_code" name="verification_code" maxlength="6" required>
+                        <div class="form-text text-center">
+                            <i class="fas fa-envelope me-1"></i>
+                            Kode OTP telah dikirim ke email Anda
+                        </div>
+                        <div class="mt-2 text-center">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                Waktu tersisa: <span id="countdown">3:00</span>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Verifikasi OTP
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+                
+                <hr class="my-4">
+                <div class="text-center">
+                    <p class="small text-muted">
+                        <i class="fas fa-question-circle me-1"></i>
+                        Tidak menerima kode? <button type="button" class="btn btn-link btn-sm p-0" id="resend-otp">Kirim ulang</button>
+                    </p>
+                    <p class="small text-muted">
+                        <i class="fas fa-life-ring me-1"></i>
+                        Butuh bantuan? <a href="#">Hubungi dukungan</a>
+                    </p>
+                    <div id="resend-status" class="mt-2" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <h5 class="card-title">
+                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                    Tentang Risk-Based Authentication
+                </h5>
+                <p class="card-text small">
+                    Sistem ini menggunakan algoritma machine learning untuk menilai risiko setiap login berdasarkan 
+                    perilaku pengguna. Verifikasi tambahan ini membantu melindungi akun Anda dari akses tidak sah.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Fokus pada input kode verifikasi dan format input
+    document.addEventListener('DOMContentLoaded', function() {
+        const codeInput = document.getElementById('verification_code');
+        const countdownElement = document.getElementById('countdown');
+        const resendButton = document.getElementById('resend-otp');
+        const resendStatus = document.getElementById('resend-status');
+        if (codeInput) {
+            codeInput.focus();
+            // Format input hanya angka
+            codeInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            // Auto-submit form when 6 digits entered
+            codeInput.addEventListener('input', function() {
+                if (this.value.length === 6) {
+                    setTimeout(() => {
+                        if (this.value.length === 6) {
+                            this.form.submit();
+                        }
+                    }, 500);
+                }
+            });
+        }
+        // Countdown timer
+        if (countdownElement) {
+            let timeLeft = 3 * 60; // 3 menit dalam detik
+            function updateCountdown() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                if (timeLeft <= 0) {
+                    countdownElement.textContent = 'Kedaluwarsa';
+                    countdownElement.className = 'text-danger';
+                    if (resendButton) resendButton.disabled = false;
+                    if (resendButton) resendButton.textContent = 'Kirim ulang';
+                } else {
+                    timeLeft--;
+                }
+            }
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }
+        // Handle resend OTP
+        if (resendButton) {
+            resendButton.addEventListener('click', function() {
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+                fetch('/resend-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        resendStatus.innerHTML = '<div class="alert alert-success alert-sm">✅ ' + data.message + '</div>';
+                        resendStatus.style.display = 'block';
+                        // Reset countdown
+                        if (countdownElement) {
+                            timeLeft = 3 * 60;
+                            countdownElement.className = 'text-muted';
+                        }
+                        // Disable resend button for 1 minute
+                        let resendCooldown = 60;
+                        const resendInterval = setInterval(() => {
+                            resendButton.innerHTML = `Kirim ulang (${resendCooldown}s)`;
+                            resendCooldown--;
+                            if (resendCooldown <= 0) {
+                                clearInterval(resendInterval);
+                                resendButton.disabled = false;
+                                resendButton.textContent = 'Kirim ulang';
+                            }
+                        }, 1000);
+                    } else {
+                        resendStatus.innerHTML = '<div class="alert alert-danger alert-sm">❌ ' + data.message + '</div>';
+                        resendStatus.style.display = 'block';
+                        resendButton.disabled = false;
+                        resendButton.textContent = 'Kirim ulang';
+                    }
+                })
+                .catch(error => {
+                    resendStatus.innerHTML = '<div class="alert alert-danger alert-sm">❌ Error mengirim OTP</div>';
+                    resendStatus.style.display = 'block';
+                    resendButton.disabled = false;
+                    resendButton.textContent = 'Kirim ulang';
+                });
+            });
+        }
+    });
+</script>
+{% endblock %} 

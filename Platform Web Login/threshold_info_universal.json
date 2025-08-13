@@ -1,0 +1,47 @@
+{
+    "model_name": "Isolation Forest for Risk-Based Authentication with Universal Features",
+    "training_date": "2025-07-13 16:19:08",
+    "number_of_features": 8,
+    "performance_metrics": {
+        "f1_score_macro": 0.9068,
+        "roc_auc": 0.9798,
+        "training_time": 5.69,
+        "prediction_time": 6.52
+    },
+    "model_parameters": {
+        "bootstrap": false,
+        "contamination": 0.21107175541470358,
+        "max_features": 0.8,
+        "max_samples": "auto",
+        "n_estimators": 200,
+        "n_jobs": -1,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+    },
+    "features_used": [
+        "OS Name_anomaly",
+        "Browser Name_anomaly", 
+        "Device Type_anomaly",
+        "TimeOfHour_anomaly",
+        "DailyLoginCount_anomaly",
+        "TimeBetweenLogins_anomaly",
+        "FailedLogin_combined_anomaly",
+        "Geolocation_Anomaly"
+    ],
+    "scoring_information": {
+        "score_min": -0.1437,
+        "score_max": 0.2414
+    },
+    "threshold_information": {
+        "robust_mean": 0.1570,
+        "mad": 0.0684,
+        "lower_threshold": 0.2595,
+        "upper_threshold": 0.5750
+    },
+    "risk_level_mapping": {
+        "0": "Rendah (Normal)",
+        "1": "Sedang (Perlu Perhatian)", 
+        "2": "Tinggi (Perlu Verifikasi)"
+    }
+}

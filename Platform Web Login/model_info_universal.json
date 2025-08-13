@@ -1,0 +1,18 @@
+{
+    "model_name": "Isolation Forest for Risk-Based Authentication with Universal Features",
+    "training_date": "2025-07-13 16:19:08",
+    "number_of_features": 8,
+    "features_used": [
+        "OS Name_anomaly",
+        "Browser Name_anomaly",
+        "Device Type_anomaly",
+        "TimeOfHour_anomaly",
+        "DailyLoginCount_anomaly",
+        "TimeBetweenLogins_anomaly",
+        "FailedLogin_combined_anomaly",
+        "Geolocation_Anomaly"
+    ],
+    "model_path": "rba_universal_isolation_0.9068.pkl",
+    "threshold_info_path": "threshold_info_universal.json",
+    "feature_info_path": "feature_info_universal.json"
+}

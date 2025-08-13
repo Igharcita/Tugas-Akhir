@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - RBA Login System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center auth-container">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-lg my-5 hover-zoom">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <h2 class="fw-bold">Login</h2>
+                </div>
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user text-primary me-2"></i>Username
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock text-primary me-2"></i>Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Ingat saya</label>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+                </form>
+                <hr class="my-4">
+                <div class="text-center">
+                    <p class="small text-muted mb-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Belum punya akun? <a href="{{ url_for('register') }}">Daftar di sini</a>
+                    </p>
+                    <p class="small text-muted">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Sistem ini menggunakan Risk-Based Authentication untuk melindungi akun Anda.
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#rbaInfoModal">Pelajari lebih lanjut</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Informasi RBA -->
+<div class="modal fade" id="rbaInfoModal" tabindex="-1" aria-labelledby="rbaInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rbaInfoModalLabel">
+                    <i class="fas fa-shield-alt me-2"></i>Risk-Based Authentication
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="fw-bold">Apa itu Risk-Based Authentication?</h5>
+                <p>Risk-Based Authentication (RBA) adalah sistem keamanan yang menilai tingkat risiko dari setiap upaya login berdasarkan berbagai faktor seperti:</p>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light hover-zoom">
+                            <div class="card-body text-center">
+                                <i class="fas fa-laptop fa-2x text-primary mb-2"></i>
+                                <h6>Perangkat dan Browser</h6>
+                                <p class="small">Menganalisis perubahan perangkat login</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light hover-zoom">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                                <h6>Pola dan Waktu Login</h6>
+                                <p class="small">Mempelajari kebiasaan login pengguna</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5 class="fw-bold mt-4">Bagaimana RBA Melindungi Akun Anda?</h5>
+                <p>Saat sistem mendeteksi risiko tinggi, Anda akan diminta melakukan verifikasi tambahan, seperti:</p>
+                <ul>
+                    <li>Memasukkan kode verifikasi</li>
+                    <li>Mengonfirmasi identitas melalui email/SMS</li>
+                    <li>Menjawab pertanyaan keamanan</li>
+                </ul>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Catatan:</strong> Dalam demo ini, sistem menggunakan algoritma Isolation Forest untuk mendeteksi anomali dan menentukan tingkat risiko login.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Mengerti</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

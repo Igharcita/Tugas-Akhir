@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - RBA Login System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card border-0 shadow-lg my-5">
+            <div class="card-header bg-primary text-white py-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                    <i class="fas fa-tachometer-alt fa-2x me-3"></i>
+                    <h3 class="mb-0">Dashboard</h3>
+                    </div>
+                    <!-- Logo Politeknik SSN -->
+                    <img src="{{ url_for('static', filename='images/Logo Poltekssn.png') }}" 
+                         alt="Politeknik SSN" 
+                         style="height: 35px; width: auto;">
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-{{ session.get('risk_color', 'success') }} shadow-sm" role="alert">
+                    <div class="d-flex align-items-center">
+                        {% if session.get('risk_level') == 0 %}
+                            <i class="fas fa-check-circle fa-2x me-3"></i>
+                        {% elif session.get('risk_level') == 1 %}
+                            <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+                        {% else %}
+                            <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                        {% endif %}
+                        <div>
+                            <h4 class="alert-heading">Selamat datang, {{ username }}!</h4>
+                            <p class="mb-0">Anda berhasil login ke dalam sistem RBA.</p>
+                            <hr>
+                            <p class="mb-0">
+                                <strong>Status Risiko:</strong> 
+                                <span class="badge bg-{{ session.get('risk_color', 'success') }}">
+                                    {{ session.get('risk_label', 'Rendah') }}
+                                </span>
+                                    <small class="d-block mt-1">
+                                    <i class="fas fa-chart-line me-1"></i>
+                                    Skor Risiko: {{ session.get('risk_score', '0.0000') }}
+                                    </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-laptop text-primary me-2"></i>
+                                    <h5 class="card-title mb-0">Informasi Perangkat</h5>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <i class="fas fa-globe text-primary me-2"></i>Browser
+                                            </div>
+                                            <span>{{ browser_info }}</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <i class="fas fa-desktop text-primary me-2"></i>Sistem Operasi
+                                            </div>
+                                            <span>{{ os_info }}</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <i class="fas fa-network-wired text-primary me-2"></i>IP Address
+                                            </div>
+                                            <span>{{ request.remote_addr }}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                                    <h5 class="card-title mb-0">Status Keamanan</h5>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <i class="fas fa-check-circle text-primary me-2"></i>Status Login
+                                            </div>
+                                            <span class="badge bg-success rounded-pill">Berhasil</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <i class="fas fa-shield-alt text-primary me-2"></i>Tingkat Risiko
+                                            </div>
+                                            <span class="badge bg-{{ session.get('risk_color', 'success') }} rounded-pill">
+                                                {{ session.get('risk_label', 'Rendah') }}
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <i class="fas fa-chart-line text-primary me-2"></i>Skor Anomali
+                                            </div>
+                                            <span>{{ session.get('risk_score', '0.0000') }}</span>
+                                            <small class="d-block mt-1 text-muted">
+                                                (Berdasarkan Isolation Forest)
+                                            </small>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4 border-0 shadow-sm">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-history text-primary me-2"></i>
+                            <h5 class="card-title mb-0">Aktivitas Login Terkini</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if login_history %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Waktu</th>
+                                            <th>IP Address</th>
+                                            <th>Browser</th>
+                                            <th>Sistem Operasi</th>
+                                            <th>Perangkat</th>
+                                            <th>Risiko</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for login in login_history %}
+                                            <tr>
+                                                <td>{{ login.login_timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                                <td>{{ login.ip_address }}</td>
+                                                <td>{{ login.browser }}</td>
+                                                <td>{{ login.os_name }}</td>
+                                                <td>{{ login.device_type }}</td>
+                                                <td>
+                                                    {% if login.risk_level == 0 %}
+                                                        <span class="badge bg-success">Rendah</span>
+                                                    {% elif login.risk_level == 1 %}
+                                                        <span class="badge bg-warning text-dark">Sedang</span>
+                                                    {% else %}
+                                                        <span class="badge bg-danger">Tinggi</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Belum ada riwayat login sebelumnya.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-2 mt-4">
+                    <a href="{{ url_for('feature_details') }}" class="btn btn-info">
+                        <i class="fas fa-chart-line me-2"></i>Detail Analisis Fitur
+                    </a>
+                    <a href="{{ url_for('profile') }}" class="btn btn-primary">
+                        <i class="fas fa-user me-2"></i>Lihat Profil
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

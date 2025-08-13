@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil - RBA Login System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-lg my-5">
+            <div class="card-header bg-primary text-white py-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-user-circle fa-2x me-3"></i>
+                    <h4 class="mb-0">Profil Pengguna</h4>
+                </div>
+            </div>
+            <div class="card-body p-5">
+                {% if profile %}
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4 mb-md-0">
+                        <div class="avatar-container mb-3">
+                            <i class="fas fa-user-circle fa-6x text-primary"></i>
+                        </div>
+                        <h4>{{ profile.username }}</h4>
+                        <p class="text-muted">
+                            <i class="fas fa-envelope me-2"></i>{{ profile.email }}
+                        </p>
+                        <p class="text-muted">
+                            <i class="fas fa-calendar-alt me-2"></i>Terdaftar sejak {{ profile.created_at.strftime('%d %B %Y') }}
+                        </p>
+                        <button class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                            <i class="fas fa-key me-2"></i>Ubah Password
+                        </button>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <h5 class="border-bottom pb-2 mb-3">
+                            <i class="fas fa-chart-line text-primary me-2"></i>Statistik Login
+                        </h5>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card border-0 bg-light h-100">
+                                    <div class="card-body text-center">
+                                        <h1 class="display-4 fw-bold text-primary">{{ stats.total_logins|default(0) }}</h1>
+                                        <p class="text-muted mb-0">Total Login</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card border-0 bg-light h-100">
+                                    <div class="card-body text-center">
+                                        <h1 class="display-4 fw-bold text-primary">{{ stats.failed_logins|default(0) }}</h1>
+                                        <p class="text-muted mb-0">Login Gagal</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card border-0 bg-light h-100">
+                                    <div class="card-body text-center">
+                                        <h1 class="display-4 fw-bold text-primary">
+                                            {% if stats and stats.avg_risk %}
+                                                {{ "%.2f"|format(stats.avg_risk*100) }}%
+                                            {% else %}
+                                                0%
+                                            {% endif %}
+                                        </h1>
+                                        <p class="text-muted mb-0">Rata-rata Risiko</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="border-bottom pb-2 mb-3">
+                            <i class="fas fa-info-circle text-primary me-2"></i>Informasi Login
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong><i class="fas fa-clock text-primary me-2"></i>Login Terakhir:</strong>
+                                    <br>
+                                    {% if profile.last_login %}
+                                        {{ profile.last_login.strftime('%d %B %Y, %H:%M:%S') }}
+                                    {% else %}
+                                        Belum ada login sebelumnya
+                                    {% endif %}
+                                </p>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <p>
+                                    <strong><i class="fas fa-shield-alt text-primary me-2"></i>Status Keamanan:</strong>
+                                    <br>
+                                    <span class="badge bg-{{ session.get('risk_color', 'success') }}">
+                                        Risiko {{ session.get('risk_label', 'Rendah') }}
+                                    </span>
+                                    <br>
+                                    <small class="text-muted">Skor: {{ session.get('risk_score', '0.0000') }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="text-center mb-3">
+                    <h5>
+                        <i class="fas fa-shield-alt text-primary me-2"></i>
+                        Keamanan Akun
+                    </h5>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-key fa-2x text-primary mb-3"></i>
+                                <h5>Password Kuat</h5>
+                                <p class="small text-muted">
+                                    Pastikan password Anda minimal 8 karakter dengan kombinasi huruf, angka, dan simbol.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-mobile-alt fa-2x text-primary mb-3"></i>
+                                <h5>Verifikasi 2 Langkah</h5>
+                                <p class="small text-muted">
+                                    Aktifkan verifikasi 2 langkah untuk meningkatkan keamanan akun Anda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-history fa-2x text-primary mb-3"></i>
+                                <h5>Pantau Aktivitas</h5>
+                                <p class="small text-muted">
+                                    Periksa secara rutin aktivitas login untuk mendeteksi akses tidak sah.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+                    <h5>Profil tidak ditemukan</h5>
+                    <p>Silakan coba login kembali.</p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ubah Password -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="changePasswordModalLabel">
+                    <i class="fas fa-key me-2"></i>Ubah Password
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Password Saat Ini</label>
+                        <input type="password" class="form-control" id="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">Password Baru</label>
+                        <input type="password" class="form-control" id="new_password" required>
+                        <div class="form-text">Password minimal 8 karakter.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_new_password" class="form-label">Konfirmasi Password Baru</label>
+                        <input type="password" class="form-control" id="confirm_new_password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="submitChangePassword">
+                    <i class="fas fa-save me-2"></i>Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Simulasi ubah password
+    document.addEventListener('DOMContentLoaded', function() {
+        const submitButton = document.getElementById('submitChangePassword');
+        if (submitButton) {
+            submitButton.addEventListener('click', function() {
+                const currentPassword = document.getElementById('current_password').value;
+                const newPassword = document.getElementById('new_password').value;
+                const confirmNewPassword = document.getElementById('confirm_new_password').value;
+                
+                if (!currentPassword || !newPassword || !confirmNewPassword) {
+                    alert('Semua field harus diisi');
+                    return;
+                }
+                
+                if (newPassword.length < 8) {
+                    alert('Password baru minimal 8 karakter');
+                    return;
+                }
+                
+                if (newPassword !== confirmNewPassword) {
+                    alert('Password baru dan konfirmasi tidak cocok');
+                    return;
+                }
+                
+                // Simulasi berhasil
+                alert('Password berhasil diubah');
+                document.getElementById('changePasswordForm').reset();
+                
+                // Tutup modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+                modal.hide();
+            });
+        }
+    });
+</script>
+{% endblock %} 

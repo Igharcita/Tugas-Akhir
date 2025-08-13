@@ -1,0 +1,39 @@
+{
+    "categorical_features": [
+        "OS Name_similarity",
+        "OS Name_Frequency",
+        "OS Name_anomaly",
+        "Browser Name_similarity",
+        "Browser Name_Frequency",
+        "Browser Name_anomaly",
+        "Device Type_similarity",
+        "Device Type_Frequency",
+        "Device Type_anomaly"
+    ],
+    "cyclic_features": [
+        "TimeOfHour_similarity",
+        "TimeOfHour_anomaly"
+    ],
+    "linear_features": [
+        "DailyLoginCount_similarity",
+        "DailyLoginCount_anomaly",
+        "TimeBetweenLogins_similarity",
+        "TimeBetweenLogins_anomaly",
+        "FailedLogin_combined_anomaly"
+    ],
+    "geolocation_features": [
+        "G4_asn_new",
+        "G5_location_volatility_10", 
+        "Geolocation_Anomaly"
+    ],
+    "universal_anomaly_columns": [
+        "OS Name_anomaly",
+        "Browser Name_anomaly",
+        "Device Type_anomaly",
+        "TimeOfHour_anomaly",
+        "DailyLoginCount_anomaly",
+        "TimeBetweenLogins_anomaly",
+        "FailedLogin_combined_anomaly",
+        "Geolocation_Anomaly"
+    ]
+}

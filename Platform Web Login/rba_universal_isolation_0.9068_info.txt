@@ -1,0 +1,50 @@
+=== INFORMATION ISOLATION FOREST MODEL (UNIVERSAL FEATURES) ===
+
+Model Name: Isolation Forest for Risk-Based Authentication with Universal Features
+Training Date: 2025-07-16 18:23:50
+Number of Features: 8
+Pipeline Components: StandardScaler + IsolationForest
+
+Performance Metrics:
+F1-Score (Macro): 0.9068
+ROC AUC: 0.9798
+Training Time: 5.70 seconds
+Prediction Time: 6.24 seconds
+
+Model Parameters:
+
+standardscaler parameters:
+- copy: True
+- with_mean: True
+- with_std: True
+
+isolationforest parameters:
+- bootstrap: False
+- contamination: 0.21107175541470358
+- max_features: 0.8
+- max_samples: auto
+- n_estimators: 200
+- n_jobs: -1
+- random_state: 42
+- verbose: 0
+- warm_start: False
+
+Features Used (Universal Only):
+- OS Name_anomaly
+- Browser Name_anomaly
+- Device Type_anomaly
+- TimeOfHour_anomaly
+- DailyLoginCount_anomaly
+- TimeBetweenLogins_anomaly
+- FailedLogin_combined_anomaly
+- Geolocation_Anomaly
+
+Scoring Information:
+Score Min: -0.1437
+Score Max: 0.2414
+
+Threshold Information:
+robust_mean: 0.1570
+mad: 0.0684
+lower_threshold: 0.2595
+upper_threshold: 0.5750
